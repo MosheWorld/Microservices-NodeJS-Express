@@ -1,0 +1,127 @@
+openapi: 3.0.0
+info:
+    title: Product API
+    version: 1.0.0
+    description: API for managing products
+    contact:
+        name: Moshe Binieli
+        email: mmoshikoo@gmail.com
+
+paths:
+    /{id}:
+        get:
+            summary: Get product by ID
+            tags:
+                - Product
+            parameters:
+                - $ref: '#/components/parameters/IdParameter'
+            responses:
+                '200':
+                    $ref: '#/components/responses/OkProductResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestResponse'
+
+    /:
+        get:
+            summary: Search products by parameters
+            tags:
+                - Product
+            parameters:
+                - $ref: '#/components/parameters/EmailParameter'
+                - $ref: '#/components/parameters/PriceParameter'
+            responses:
+                '200':
+                    $ref: '#/components/responses/OkProductsResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestResponse'
+        post:
+            summary: Add product
+            tags:
+                - Product
+            requestBody:
+                $ref: '#/components/requestBodies/AddProductBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/OkProductResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestResponse'
+
+components:
+    schemas:
+        Product:
+            type: object
+            properties:
+                id:
+                    type: string
+                userEmail:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+                price:
+                    type: number
+
+    responses:
+        OkProductResponse:
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Product'
+
+        OkProductsResponse:
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/components/schemas/Product'
+
+        BadRequestResponse:
+            description: Bad Request
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+
+    requestBodies:
+        AddProductBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            name:
+                                type: string
+                            description:
+                                type: string
+                            price:
+                                type: number
+
+    parameters:
+        IdParameter:
+            in: path
+            name: id
+            required: true
+            schema:
+                type: string
+
+        EmailParameter:
+            name: email
+            in: query
+            description: User's email
+            schema:
+                type: string
+
+        PriceParameter:
+            name: price
+            in: query
+            description: Product price
+            schema:
+                type: string

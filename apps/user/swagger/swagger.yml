@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+    title: User API
+    version: 1.0.0
+    description: API for managing users
+    contact:
+        name: Moshe Binieli
+        email: mmoshikoo@gmail.com
+
+paths:
+    /signup:
+        post:
+            summary: User Signup
+            tags:
+                - User
+            requestBody:
+                $ref: '#/components/requestBodies/SignupBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/TokenResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestResponse'
+
+    /login:
+        post:
+            summary: User Login
+            tags:
+                - User
+            requestBody:
+                $ref: '#/components/requestBodies/LoginBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/TokenResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedResponse'
+
+    /validate-token:
+        post:
+            summary: Validate Token
+            tags:
+                - User
+            requestBody:
+                $ref: '#/components/requestBodies/ValidateTokenBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/OkValidateTokenResponse'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedResponse'
+
+components:
+    responses:
+        TokenResponse:
+            description: Token Response
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            token:
+                                type: string
+
+        BadRequestResponse:
+            description: Bad Request
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+
+        UnauthorizedResponse:
+            description: Unauthorized
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+
+        OkValidateTokenResponse:
+            description: Validation result.
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            email:
+                                type: string
+
+    requestBodies:
+        SignupBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            email:
+                                type: string
+                            password:
+                                type: string
+
+        LoginBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            email:
+                                type: string
+                            password:
+                                type: string
+
+        ValidateTokenBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            token:
+                                type: string

@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+    title: Shop API
+    version: 1.0.0
+    description: API for managing shop
+    contact:
+        name: Moshe Binieli
+        email: mmoshikoo@gmail.com
+
+paths:
+    /:
+        get:
+            summary: Gets all user data
+            tags:
+                - Shop
+            responses:
+                '200':
+                    $ref: '#/components/responses/OkGetAllUserDataResponse'
+                '500':
+                    $ref: '#/components/responses/MessageResponse'
+        post:
+            summary: Creates sample data for the user
+            tags:
+                - Shop
+            requestBody:
+                $ref: '#/components/requestBodies/RemoveUserDataBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/MessageResponse'
+                '500':
+                    $ref: '#/components/responses/MessageResponse'
+        delete:
+            summary: Removes all user data
+            tags:
+                - Shop
+            responses:
+                '200':
+                    $ref: '#/components/responses/MessageResponse'
+                '500':
+                    $ref: '#/components/responses/MessageResponse'
+
+components:
+    responses:
+        MessageResponse:
+            description: Response object with message attribute
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+        OkMessageResponse:
+            description: Ok
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+        OkGetAllUserDataResponse:
+            description: Ok Get All User Data Response
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/DataSummary'
+
+    requestBodies:
+        RemoveUserDataBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            token:
+                                type: string
+
+    schemas:
+        DataSummary:
+            type: object
+            properties:
+                email:
+                    type: string
+                creditCardDataList:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreditCardData'
+        CreditCardData:
+            type: object
+            properties:
+                creditCard:
+                    type: string
+                purchasedProducts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PurchasedProduct'
+        PurchasedProduct:
+            type: object
+            properties:
+                name:
+                    type: string
+                price:
+                    type: number
+                quantity:
+                    type: number

@@ -1,0 +1,121 @@
+openapi: 3.0.0
+info:
+    title: Payment API
+    version: 1.0.0
+    description: API for managing payments
+    contact:
+        name: Moshe Binieli
+        email: mmoshikoo@gmail.com
+
+paths:
+    /{id}:
+        get:
+            summary: Get payment by ID
+            tags:
+                - Payment
+            parameters:
+                - $ref: '#/components/parameters/IdParameter'
+            responses:
+                '200':
+                    $ref: '#/components/responses/OkPaymentResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestResponse'
+
+    /:
+        get:
+            summary: Search payments by parameters
+            tags:
+                - Payment
+            parameters:
+                - $ref: '#/components/parameters/EmailParameter'
+            responses:
+                '200':
+                    $ref: '#/components/responses/OkPaymentsResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestResponse'
+        post:
+            summary: Add payment
+            tags:
+                - Payment
+            requestBody:
+                $ref: '#/components/requestBodies/AddPaymentBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/OkPaymentResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestResponse'
+
+components:
+    schemas:
+        Payment:
+            type: object
+            properties:
+                id:
+                    type: string
+                userEmail:
+                    type: string
+                productId:
+                    type: string
+                creditCardNumber:
+                    type: string
+                quantity:
+                    type: integer
+                date:
+                    type: string
+
+    responses:
+        OkPaymentResponse:
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Payment'
+
+        OkPaymentsResponse:
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/components/schemas/Payment'
+
+        BadRequestResponse:
+            description: Bad Request
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+
+    requestBodies:
+        AddPaymentBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            productId:
+                                type: string
+                            creditCardNumber:
+                                type: string
+                            quantity:
+                                type: integer
+
+    parameters:
+        IdParameter:
+            in: path
+            name: id
+            required: true
+            schema:
+                type: string
+
+        EmailParameter:
+            name: email
+            in: query
+            description: User's email
+            schema:
+                type: string
